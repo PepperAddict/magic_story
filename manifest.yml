@@ -3,7 +3,7 @@ modules:
     - key: magic-stories-hello-world-panel
       function: main
       title: Magic Stories
-      icon: https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Magic_wand.svg/424px-Magic_wand.svg.png
+      icon: https://raw.githubusercontent.com/PepperAddict/magic_story/master/magic-ss.svg
   function:
     - key: main
       handler: index.run
