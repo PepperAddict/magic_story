@@ -18,7 +18,7 @@ import ForgeUI, {
 import api, { route, fetch, storage } from "@forge/api";
 
 const NewSet = ({ figma, talkAi }) => {
-  const [mopen, setMopen] = useState(true);
+  const [mopen, setMopen] = useState(false);
 
   const newApis = async (formData) => {
     const figmaToken = formData?.figmaToken;
@@ -44,6 +44,7 @@ const NewSet = ({ figma, talkAi }) => {
         <ModalDialog
           header="Replace with your own api keys"
           onClose={() => setMopen(false)}
+          closeButtonText="Close"
         >
           <Form onSubmit={newApis} submitButtonText="Apply Figma Key">
             <TextField
@@ -99,7 +100,7 @@ const App = () => {
   const [formState, setFormState] = useState(undefined);
   const [prompt, setPrompt] = useState("");
   const { platformContext } = useProductContext();
-
+  const [mopen, setMopen] = useState(true);
   const [success, setSuccess] = useState(false);
   const [figmaData, setFigmaData] = useState(null);
   const [getFigma, setGetFigma] = useState("");
@@ -287,44 +288,61 @@ const App = () => {
   const moreButtons = [
     <Button text="Clear" onClick={() => setFormState("")} />,
   ];
+  const content = (
+    <Fragment>
+       <Text>
+            User stories are generated from your summary. Generate user stories,
+            acceptance criteria and/or Figma thumbnail. Once saved your
+            description will be updated.{" "}
+          </Text>
+          {formState ? (
+            <Form
+              onSubmit={goBack}
+              actionButtons={moreButtons}
+              submitButtonText="Apply to Description"
+            >
+              <SectionMessage
+                title="Your prompt has given you..."
+                children="true"
+                appearance="change"
+              >
+                <Text>{formState}</Text>
+              </SectionMessage>
+              {success && (
+                <SectionMessage appearance="confirmation">
+                  <Text>Your new description was applied. Please refresh</Text>
+                </SectionMessage>
+              )}
+            </Form>
+          ) : (
+            <Fragment>
+              <Form onSubmit={onSubmit} submitButtonText="Generate">
+                <TextArea
+                  name="prompt"
+                  defaultValue={title}
+                  value={title}
+                  type="text"
+                  autoComplete="true"
+                />
+              </Form>
+
+              <NewSet figma={gettaFigma} talkAi={gettaAi} />
+            </Fragment>
+          )}
+    </Fragment>
+  )
 
   return (
     <Fragment>
-      {formState ? (
-        <Form
-          onSubmit={goBack}
-          actionButtons={moreButtons}
-          submitButtonText="Apply to Description"
+      {mopen ? (
+        <ModalDialog
+          header="Magic Stories"
+          onClose={() => setMopen(false)}
+          closeButtonText="Close"
         >
-          <SectionMessage
-            title="Your prompt has given you..."
-            children="true"
-            appearance="change"
-          >
-            <Text>{formState}</Text>
-          </SectionMessage>
-          {success && (
-            <SectionMessage appearance="confirmation">
-              <Text>Your new description was applied. Please refresh</Text>
-            </SectionMessage>
-          )}
-        </Form>
-      ) : (
-        <Fragment>
-          <Form onSubmit={onSubmit} submitButtonText="Generate">
-            <TextArea
-              name="prompt"
-              defaultValue={title}
-              value={title}
-              type="text"
-              autoComplete="true"
-              label="What would you like your user story to be about?"
-            />
-          </Form>
-
-          <NewSet figma={gettaFigma} talkAi={gettaAi} />
-        </Fragment>
-      )}
+         {content}
+        </ModalDialog>
+      ): content}
     </Fragment>
   );
 };
