@@ -1,0 +1,22 @@
+modules:
+  jira:issuePanel:
+    - key: magic-stories-hello-world-panel
+      function: main
+      title: Magic Stories
+      icon: https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Magic_wand.svg/424px-Magic_wand.svg.png
+  function:
+    - key: main
+      handler: index.run
+permissions:
+  external:
+    fetch:
+      backend:
+        - "*.ai21.com"
+        - "*.figma.com"
+        - "*.openai.com"
+  scopes:
+    - "read:jira-work"
+    - "write:jira-work"
+    - "storage:app"
+app:
+  id: ari:cloud:ecosystem::app/73a009a1-b1b9-4806-b4e1-c35c1dd7de5f
