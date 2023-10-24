@@ -18,7 +18,7 @@ import ForgeUI, {
 import api, { route, fetch, storage } from "@forge/api";
 
 const NewSet = ({ figma, talkAi }) => {
-  const [mopen, setMopen] = useState(false);
+  const [mopen, setMopen] = useState(true);
 
   const newApis = async (formData) => {
     const figmaToken = formData?.figmaToken;
@@ -45,23 +45,16 @@ const NewSet = ({ figma, talkAi }) => {
           header="Replace with your own api keys"
           onClose={() => setMopen(false)}
         >
-          <Form onSubmit={newApis}>
+          <Form onSubmit={newApis} submitButtonText="Apply Figma Key">
             <TextField
               name="figmaToken"
               label={
                 figma
-                  ? "Replace existing figma API key"
-                  : "Enter a new Figma Token"
+                  ? "Replace existing Figma API key"
+                  : "Enter a new Figma key"
               }
             />
-            <TextField
-              name="aiToken"
-              label={
-                talkAi
-                  ? "Replace existing Ai21 Labs API key"
-                  : "Enter a new Ai21 API key"
-              }
-            />
+
             {figma ? (
               <Text>Figma API was already set</Text>
             ) : (
@@ -75,6 +68,16 @@ const NewSet = ({ figma, talkAi }) => {
                 </Link>
               </Text>
             )}
+          </Form>
+          <Form onSubmit={newApis} submitButtonText="Apply Ai21 Key">
+            <TextField
+              name="aiToken"
+              label={
+                talkAi
+                  ? "Replace existing Ai21 Labs API key"
+                  : "Enter a new Ai21 API key"
+              }
+            />
             {talkAi ? (
               <Text>An Ai21 Labs API key was already set</Text>
             ) : (
@@ -145,24 +148,21 @@ const App = () => {
         })
           .then((res) => res.json())
           .then((res) => {
-
             const figmaFile = "https://figma.com/file/" + getFigma;
             if (res) {
-               const figmaObject = {
-              id: getFigma,
-              name: res.name,
-              lastModified: res.lastModified,
-              url: figmaFile,
-              thumbnail: res.thumbnailUrl,
-            };
-            setFigmaData(figmaObject);
-            return figmaObject;
+              const figmaObject = {
+                id: getFigma,
+                name: res.name,
+                lastModified: res.lastModified,
+                url: figmaFile,
+                thumbnail: res.thumbnailUrl,
+              };
+              setFigmaData(figmaObject);
+              return figmaObject;
             }
-
-
           });
       } catch (e) {
-        setFigmaData(null)
+        setFigmaData(null);
         console.log(e);
       }
     }
