@@ -323,6 +323,7 @@ const App = () => {
                   value={title}
                   type="text"
                   autoComplete="true"
+                  label="User Story Prompt"
                 />
               </Form>
 
